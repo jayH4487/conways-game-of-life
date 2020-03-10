@@ -1,19 +1,30 @@
 class App {
     constructor() {
-        this.rows = 10
-        this.columns = 10
+        this.cellPixelSize = 10
+        this.rows = 100
+        this.columns = 100
         this.grid = this.createGrid()
+        this.isPlay = false
+        this.intervalID = undefined
 
         this.$grid = document.querySelector(".grid")
-        this.$next = document.querySelector(".next")
+        this.$step = document.querySelector(".step")
+        this.$playPause = document.querySelector(".play-pause")
+        this.$randomSeed = document.querySelector(".random-seed")
         
+        this.$grid.setAttribute("width", `${this.columns * this.cellPixelSize}`)
+        this.$grid.setAttribute("height", `${this.rows * this.cellPixelSize}`)
         this.displayGrid(this.grid)
         this.addEventListeners()
+
+        this.nextGeneration = this.nextGeneration.bind(this)
     }
 
     addEventListeners() {
-        this.$next.addEventListener("click", () => this.handleNextClick())
+        this.$step.addEventListener("click", () => this.handleStepClick())
         this.$grid.addEventListener("click", (e) => this.handleGridClick(e))
+        this.$playPause.addEventListener("click", () => this.handlePlayPauseClick())
+        this.$randomSeed.addEventListener("click", () => this.handleRandomSeedClick())
         this.$grid.addEventListener("mousedown", (e) => this.handleGridMousedown(e))
     }
 
@@ -26,6 +37,10 @@ class App {
        
         return grid
         
+    }
+
+    randomSeed(grid) {
+        return grid.map(rowElement => rowElement.map(cell => Math.floor(Math.random() * 2)))
     }
 
     updateGrid(grid) {
@@ -77,7 +92,6 @@ class App {
             const res = el === 0 && neighbours === 3 ? 1 :
             el === 1 && (neighbours === 2 || neighbours === 3) ? 1 :
             el = 0
-            console.log([el, rowIndex, colIndex, neighbours, res])
             
             return res
         }
@@ -90,16 +104,35 @@ class App {
         
     }
 
-    handleNextClick() {
+    nextGeneration() {
         this.grid = this.updateGrid(this.grid)
+        this.displayGrid(this.grid)
+
+    }
+
+    handleStepClick() {
+        this.nextGeneration()
+    }
+
+    handlePlayPauseClick() {
+        this.isPlay = !this.isPlay
+        this.$playPause.textContent = this.isPlay ? "Pause" : "Play"
+        
+        if (this.isPlay) {
+            this.intervalID = setInterval(this.nextGeneration, 250)
+        } else {
+            clearInterval(this.intervalID)
+        }
+    }
+
+    handleRandomSeedClick() {
+        this.grid = this.randomSeed(this.grid)
         this.displayGrid(this.grid)
     }
 
     handleGridClick(e) {
 
-        if (e.detail > 1) e.preventDefault()
         const [x, y] = e.target.dataset.cell.split(",").map(Number)
-        // console.log([x, y])
         this.grid = this.grid
             .map(
                 (row, rowI) => row.map(
@@ -118,16 +151,24 @@ class App {
         this.$grid.innerHTML = grid
             .map(
                 (row, y) => row.map(
-                    (el, x) => `
-                    <rect
-                        data-cell=${[x,y]}
-                        x=${x * 40}
-                        y=${y * 40}
-                        width="40"
-                        height="40"
-                        style="fill:${el === 1 ? "black" : "white"};stroke-width:1;stroke:grey"
-                    />
+                    (el, x) => el === 1 ?
                     `
+                        <rect
+                            data-cell=${[x,y]}
+                            x=${x * this.cellPixelSize}
+                            y=${y * this.cellPixelSize}
+                            rx="${this.cellPixelSize / 10}"
+                            ry="${this.cellPixelSize / 10}"
+                            width="${this.cellPixelSize}"
+                            height="${this.cellPixelSize}"
+                            style="
+                                fill:${el === 1 ? "black" : "white"};
+                                stroke-width:0.5;
+                                stroke:rgb(0,0,0);
+                                opacity:0.5
+                            "
+                        />
+                    ` : ``
                 ).join("")
             ).join("")
     }

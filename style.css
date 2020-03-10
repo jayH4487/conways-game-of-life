@@ -3,7 +3,7 @@
 }
 
 body, html {
-    height: 100%;
+    height: 95vh;
 }
 
 header {
@@ -29,7 +29,7 @@ header {
 .grid {
     display: block;
     margin: auto;
-    outline: black 2px solid;
+    /* outline: black 2px solid; */
 }
 
 .control {
