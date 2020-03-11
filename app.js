@@ -6,11 +6,13 @@ class App {
         this.grid = this.createGrid()
         this.isPlay = false
         this.intervalID = undefined
+        this.population = 0
 
         this.$grid = document.querySelector(".grid")
         this.$step = document.querySelector(".step")
         this.$playPause = document.querySelector(".play-pause")
         this.$randomSeed = document.querySelector(".random-seed")
+        this.$population = document.querySelector(".population")
         
         this.$grid.setAttribute("width", `${this.columns * this.cellPixelSize}`)
         this.$grid.setAttribute("height", `${this.rows * this.cellPixelSize}`)
@@ -54,7 +56,7 @@ class App {
         const west = (arr, rowIndex, colIndex) =>       arr[rowIndex + 0][colIndex - 1]
         const northWest = (arr, rowIndex, colIndex) =>  arr[rowIndex - 1][colIndex - 1]
 
-        const getNeighbours = (arr, rowIndex, colIndex) => {
+        const getNeighbourCount = (arr, rowIndex, colIndex) => {
 
             const reducer = (acc, fn) => acc + fn(arr, rowIndex, colIndex)
 
@@ -87,10 +89,10 @@ class App {
         }
 
         const liveOrDie = (el, arr, rowIndex, colIndex) => {
-            const neighbours = getNeighbours(arr, rowIndex, colIndex)
+            const neighbourCount = getNeighbourCount(arr, rowIndex, colIndex)
             
-            const res = el === 0 && neighbours === 3 ? 1 :
-            el === 1 && (neighbours === 2 || neighbours === 3) ? 1 :
+            const res = el === 0 && neighbourCount === 3 ? 1 :
+            el === 1 && (neighbourCount === 2 || neighbourCount === 3) ? 1 :
             el = 0
             
             return res
@@ -106,8 +108,13 @@ class App {
 
     nextGeneration() {
         this.grid = this.updateGrid(this.grid)
+        this.population = this.getPopulation(this.grid)
         this.displayGrid(this.grid)
 
+    }
+
+    getPopulation(grid) {
+        return grid.reduce((acc, row) => acc + row.reduce((accSub, cell) => cell === 1 ? accSub + 1 : accSub, 0), 0)
     }
 
     handleStepClick() {
@@ -127,6 +134,7 @@ class App {
 
     handleRandomSeedClick() {
         this.grid = this.randomSeed(this.grid)
+        this.population = this.getPopulation(this.grid)
         this.displayGrid(this.grid)
     }
 
@@ -138,6 +146,8 @@ class App {
                 (row, rowI) => row.map(
                     (el, colI) => rowI === y && colI === x ? Math.abs(el - 1) : el))
         
+        this.population = this.getPopulation(this.grid)
+        console.log(this.population)
         this.displayGrid(this.grid)
     }
 
@@ -148,11 +158,28 @@ class App {
 
 
     displayGrid(grid) {
+
+        this.$population.innerHTML = this.population
+
+        const liveCellStyle = `
+            style="
+            fill:black;
+            stroke-width:0.5;
+            stroke:rgb(0,0,0);
+            opacity:0.5"
+        `
+        const deadCellStyle = `
+            style="
+            fill:white;
+            stroke-width:0.0;
+            stroke:rgb(0,0,0);
+            opacity:0.5"
+        `
+
         this.$grid.innerHTML = grid
             .map(
                 (row, y) => row.map(
-                    (el, x) => el === 1 ?
-                    `
+                    (el, x) => `
                         <rect
                             data-cell=${[x,y]}
                             x=${x * this.cellPixelSize}
@@ -161,18 +188,13 @@ class App {
                             ry="${this.cellPixelSize / 10}"
                             width="${this.cellPixelSize}"
                             height="${this.cellPixelSize}"
-                            style="
-                                fill:${el === 1 ? "black" : "white"};
-                                stroke-width:0.5;
-                                stroke:rgb(0,0,0);
-                                opacity:0.5
-                            "
+                            ${el === 1 ? liveCellStyle : deadCellStyle}
                         />
-                    ` : ``
+                    `
                 ).join("")
             ).join("")
     }
 
 }
 
-const app = new App()
+new App()
