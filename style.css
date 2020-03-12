@@ -1,45 +1,64 @@
-* {
-    font-family: Arial, Helvetica, sans-serif;
-}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
-body, html {
-    height: 95vh;
+html, body {
+    font-family: "Montserrat", sans-serif, Arial, Helvetica, sans-serif;
+    margin: 10px;
+    background: #3c53b9;
+  }
+
+.container {
+    height: 100%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 1fr 600px 1fr;
+    grid-template-rows: 100px auto auto;
+    justify-content: center;
+    grid-template-areas: 
+        ". h ."
+        ". c ."
+        ". m .";
 }
 
 header {
-    height: 100px;
-    background-color: #333;
-    color: whitesmoke;
-    margin-bottom: 15px;
-    text-align: center;
-    font-size: 30px;
+    grid-area: h;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-
-.container {
-    width: 95%;
-    margin: 0 auto;
-    padding: 2em 0;
-    align-content: center;
-}
-
-.grid {
-    display: block;
-    margin: auto;
-    /* outline: black 2px solid; */
+    font-size: 3em;
+    color: #f6f6ff;
 }
 
 .control {
-    width: 400px;
-    margin: 0 auto 2em;
-    display: flex;
-    justify-content: center;
+    grid-area: c;
+    display: grid;
+    grid-template-columns: 200px repeat(3, 1fr);
+    grid-gap: 10px;
 }
 
-.control > button {
-    flex: 1;
+.population {
+    margin: 0.5em;
+    color: #f6f6ff;
 }
 
+main {
+    grid-area: m;
+}
+
+button {
+    background:#f6f6ff;
+    border: none;
+    border-radius: 2em;
+}
+button:focus {
+    outline: none;
+}
+
+
+.menu > img {
+    height: 25px;
+    width: 25px;
+}
+
+.grid {
+    backround: #dedee5;
+}

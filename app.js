@@ -1,8 +1,8 @@
 class App {
     constructor() {
         this.cellPixelSize = 10
-        this.rows = 100
-        this.columns = 100
+        this.rows = 60
+        this.columns = 60
         this.grid = this.createGrid()
         this.isPlay = false
         this.intervalID = undefined
@@ -123,7 +123,9 @@ class App {
 
     handlePlayPauseClick() {
         this.isPlay = !this.isPlay
-        this.$playPause.textContent = this.isPlay ? "Pause" : "Play"
+        this.$playPause.innerHTML = this.isPlay ?
+            `<img src="https://icon.now.sh/pause" alt="pause" />` :
+            `<img src="https://icon.now.sh/play" alt="play"/>`
         
         if (this.isPlay) {
             this.intervalID = setInterval(this.nextGeneration, 250)
@@ -159,7 +161,7 @@ class App {
 
     displayGrid(grid) {
 
-        this.$population.innerHTML = this.population
+        this.$population.innerHTML = `Population: ${this.population}`
 
         const liveCellStyle = `
             style="
@@ -184,8 +186,8 @@ class App {
                             data-cell=${[x,y]}
                             x=${x * this.cellPixelSize}
                             y=${y * this.cellPixelSize}
-                            rx="${this.cellPixelSize / 10}"
-                            ry="${this.cellPixelSize / 10}"
+                            rx="${this.cellPixelSize / 5}"
+                            ry="${this.cellPixelSize / 5}"
                             width="${this.cellPixelSize}"
                             height="${this.cellPixelSize}"
                             ${el === 1 ? liveCellStyle : deadCellStyle}

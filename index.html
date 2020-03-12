@@ -9,26 +9,33 @@
     </head>
 
     <body>
-        <header>Conway's Game of Life</header>
 
-        <main>
+        <div class="container">
 
-            <div class="container">
-                <label>
-                    Population: <span class="population">0</span>
-                </label>
+            <header>Conway's Game of Life</header>
 
-                <div class="control">
-                    <button class="random-seed">Random Seed</button>
-                    <button class="play-pause">Play</button>
-                    <button class="step">Step</button>
-                </div>
 
-                <svg class="grid" width="400" height="400"></svg>
+            <div class="control">
+
+                <p class="population">Population: 0</p>
+                <button class="random-seed">
+                    <img src="https://icon.now.sh/shuffle" alt="shuffle" /></button>
+                <button class="play-pause">
+                    <img src="https://icon.now.sh/play" alt="play" />
+                </button>
+                <button class="step">
+                    <img src="https://icon.now.sh/next" alt="step" />
+                </button>
 
             </div>
 
-        </main>
+            <main>
+
+                <svg class="grid" width="500" height="500"></svg>
+
+            </main>
+
+        </div>
 
         <script src="app.js"></script>
     </body>
