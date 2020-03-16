@@ -49,10 +49,10 @@ button {
     border: none;
     border-radius: 2em;
 }
+
 button:focus {
     outline: none;
 }
-
 
 .menu > img {
     height: 25px;
@@ -60,5 +60,5 @@ button:focus {
 }
 
 .grid {
-    backround: #dedee5;
+    background: #728cff;
 }

@@ -128,9 +128,18 @@ class App {
             `<img src="https://icon.now.sh/play" alt="play"/>`
         
         if (this.isPlay) {
+            this.$randomSeed.disabled = true
+            this.$randomSeed.style.background = "#5d658c"
+            this.$step.disabled = true
+            this.$step.style.background = "#5d658c"
             this.intervalID = setInterval(this.nextGeneration, 250)
         } else {
             clearInterval(this.intervalID)
+            this.$randomSeed.disabled = false
+            this.$randomSeed.style.background = "#f6f6ff"
+            this.$step.disabled = false
+            this.$step.style.background = "#f6f6ff"
+
         }
     }
 
