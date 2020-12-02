@@ -124,8 +124,8 @@ class App {
     handlePlayPauseClick() {
         this.isPlay = !this.isPlay
         this.$playPause.innerHTML = this.isPlay ?
-            `<img src="https://icon.now.sh/pause" alt="pause" />` :
-            `<img src="https://icon.now.sh/play" alt="play"/>`
+            `<i class="fas fa-pause"></i>` :
+            `<i class="fas fa-play"></i>`
         
         if (this.isPlay) {
             this.$randomSeed.disabled = true
